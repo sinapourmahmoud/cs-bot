@@ -45,11 +45,14 @@ def _load_admin_ids():
 
 ADMIN_IDS = _load_admin_ids()
 
+# Set to True to show the "🎬 برنامه‌ها" (events/cinema) button again.
+EVENTS_MENU_ENABLED = False
+
 
 MAIN_MENU_BUTTONS = [
     "📍 مکان‌ها",
     "لیست دروس 📚",
-    "🎬 برنامه‌ها",
+    *(["🎬 برنامه‌ها"] if EVENTS_MENU_ENABLED else []),
     "🔗 لینک‌ها",
     "شماره‌ها 📞",
     "🌐 مجازی",
@@ -69,7 +72,8 @@ def register_hello(bot):
         "لیست دروس 📚",
     )
 
-    main_keyboard.row("🎬 برنامه‌ها")
+    if EVENTS_MENU_ENABLED:
+        main_keyboard.row("🎬 برنامه‌ها")
 
     main_keyboard.row(
         "🔗 لینک‌ها",
@@ -130,6 +134,11 @@ def register_hello(bot):
             return
 
         name = message.from_user.first_name or "دوست من"
+        events_line = (
+            "همچنین می‌تونی از همین ربات برای برنامه سینما ثبت‌نام کنی. 🎬\n\n"
+            if EVENTS_MENU_ENABLED
+            else ""
+        )
 
         bot.send_message(
             message.chat.id,
@@ -146,9 +155,7 @@ def register_hello(bot):
 
 لینک‌های مورد نیاز و شماره‌های مورد نیاز هم توی بخش‌های «🔗 لینک‌ها» و «شماره‌ها 📞» هستن.
 
-همچنین می‌تونی از همین ربات برای برنامه سینما ثبت‌نام کنی. 🎬
-
-می‌تونی چیزی که می‌خوای رو از منوی پایین پیدا کنی ☺️
+{events_line}می‌تونی چیزی که می‌خوای رو از منوی پایین پیدا کنی ☺️
 """,
             reply_markup=main_keyboard,
         )

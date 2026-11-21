@@ -11,6 +11,7 @@ from db import Event, Registration, SessionLocal, User
 from handlers.cinema_registration import (
     begin_registration as begin_cinema_registration,
 )
+from handlers.register_hello import EVENTS_MENU_ENABLED
 from utils.locations import locations
 from utils.socialmedia import socialmedias
 
@@ -45,7 +46,14 @@ def register_buttons(bot):
             about_us(message)
 
         elif text in ("🎬 برنامه‌ها", "🎬 سینما"):
-            send_events_menu(message)
+            # Users who still have the old keyboard can tap this button.
+            if EVENTS_MENU_ENABLED:
+                send_events_menu(message)
+            else:
+                bot.send_message(
+                    message.chat.id,
+                    "❌ این بخش در حال حاضر غیرفعال است.",
+                )
 
     @bot.callback_query_handler(
         func=lambda call: call.data.startswith("cat-")
@@ -606,13 +614,11 @@ https://tabrizu.ac.ir/fa
 
 هدفمون ایجاد یه فضای پویاست برای یادگیری، اشتراک تجربه، برگزاری کارگاه‌ها، مسابقات، و کلی فعالیت خفن علمی و فرهنگی 📓
 
-🔹 اعضای انجمن:
+🔹 توسعه دهنده بات:
 سیناپورمحمود(با تشکر از AI عزیز)
 
 🔺 تشکر ویژه از:
 
-➖ حسین حبیبی
-بابت ایده ربات
 
 ➖ بهزاد پورمحمود
 بابت تمامی حمایت‌های مادی و معنوی
